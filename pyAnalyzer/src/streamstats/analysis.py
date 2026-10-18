@@ -29,7 +29,13 @@ class Stats:
         if self.last_timestamp is None or event.timestamp > self.last_timestamp:
             self.last_timestamp = event.timestamp
 
-    def get_top_error_sources(self, limit: int = 5) -> List[tuple]:
-        """Возвращает список топ-N источников ошибок, отсортированных по убыванию."""
+    def get_top_error_sources(self, limit: int = 5) -> Dict[str, int]:
+        """
+        Возвращает словарь топ-N источников ошибок.
+        Ключ — имя источника, значение — количество ошибок.
+        """
+        # Сортируем и превращаем в словарь
         sorted_errors = sorted(self.error_sources.items(), key=lambda x: x[1], reverse=True)
-        return sorted_errors[:limit]
+        # Создаем словарь только для первых N элементов
+        return {source: count for source, count in sorted_errors[:limit]}
+
